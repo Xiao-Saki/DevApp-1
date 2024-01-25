@@ -36,7 +36,8 @@ export default function Login() {
       .request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
-        window.localStorage.setItem("accessToken", JSON.stringify(response.data));
+        window.localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
+        navigate("/home");
       })
       .catch((error) => {
         if (isAxiosError(error) && error.response && error.response.status === 403) {
@@ -47,10 +48,6 @@ export default function Login() {
           setErrorMsg("予期せぬエラーが発生しました");
         }
       });
-
-    if (window.localStorage.getItem("accessToken")) {
-      navigate("/home");
-    }
   };
 
   return (
