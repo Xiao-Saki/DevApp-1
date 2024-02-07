@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ReactNode, useState } from "react";
 import { Container, InputUserInfo, Form, ErrorMessages, NavigateLink, SubmitButton } from "../styles/AuthForm.style";
@@ -13,14 +13,15 @@ type LoginForm = {
 
 export default function Login() {
   const navigate = useNavigate();
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState(""); //エラーメッセージ配置用
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<LoginForm>({ mode: "onChange" });
 
-  const onSubmit = async (data: LoginForm) => {
+  const onSubmit: SubmitHandler<LoginForm> = (data) => {
     console.log(data);
 
     const config = {
@@ -37,6 +38,7 @@ export default function Login() {
       .then((response) => {
         console.log(JSON.stringify(response.data));
         window.localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
+        window.localStorage.setItem("email", data.email);
         navigate("/home");
       })
       .catch((error) => {
@@ -48,6 +50,7 @@ export default function Login() {
           setErrorMsg("予期せぬエラーが発生しました");
         }
       });
+    reset();
   };
 
   return (

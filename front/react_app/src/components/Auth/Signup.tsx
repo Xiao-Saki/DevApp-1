@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ReactNode, useState } from "react";
 import {
@@ -25,6 +25,7 @@ export default function SignUp() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<SignUpForm>({ mode: "onChange" });
 
@@ -32,7 +33,7 @@ export default function SignUp() {
     setIsRevealPassword((prevState) => !prevState);
   };
 
-  const onSubmit = async (data: SignUpForm) => {
+  const onSubmit: SubmitHandler<SignUpForm> = (data) => {
     console.log(data);
 
     const config = {
@@ -56,6 +57,7 @@ export default function SignUp() {
           setErrorMsg("登録済みのEmailです");
         }
       });
+    reset();
   };
 
   return (
